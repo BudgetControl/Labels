@@ -7,7 +7,7 @@ use Slim\Http\Interfaces\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Budgetcontrol\Label\Controller\LabelController;
 
-class GetApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_get_label_list()
@@ -127,6 +127,41 @@ class GetApiTest extends \PHPUnit\Framework\TestCase
         $label = Label::where('workspace_id', 1)->where('uuid', 'bea004bc-d322-4f4b-9aae-5e8a7c8651fb')->first();
         $this->assertNull($label);
         
+    }
+
+    public function test_update_label()
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
+
+        $request->method('getParsedBody')->willReturn([
+            'name' => 'JohnDoeUPDATED',
+            'color' => '#000000',
+        ]);
+
+        $controller = new LabelController();
+        $result = $controller->update($request, $response, ['wsid' => 1, 'label_id' => 'bea004bc-d322-4f4b-9aae-5e8a7c8651fb']);
+
+        $this->assertEquals(200, $result->getStatusCode());
+
+        $model = Label::where('workspace_id', 1)->where('uuid', 'bea004bc-d322-4f4b-9aae-5e8a7c8651fb')->first();
+        $this->assertEquals('JohnDoeUPDATED', $model->name);
+        $this->assertEquals('#000000', $model->color);
+
+    }
+
+    public function test_delete_label()
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
+
+        $controller = new LabelController();
+        $result = $controller->delete($request, $response, ['wsid' => 1, 'label_id' => 'bea004bc-d322-4f4b-9aae-5e8a7c8651fb']);
+
+        $this->assertEquals(204, $result->getStatusCode());
+
+        $model = Label::where('workspace_id', 1)->where('uuid', 'bea004bc-d322-4f4b-9aae-5e8a7c8651fb')->first();
+        $this->assertNull($model);
     }
 
 }
