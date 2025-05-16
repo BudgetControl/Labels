@@ -73,7 +73,9 @@ class LabelController extends Controller {
         }
 
         $label->name = $data['name'];
+        /** @depreceted  */
         $label->archive = $data['archive'];
+        $label->color = $data['color'];
         $label->save();
 
         return response($label->toArray());

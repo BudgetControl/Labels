@@ -7,7 +7,7 @@ use Slim\Http\Interfaces\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Budgetcontrol\Label\Controller\LabelController;
 
-class GetApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_get_label_list()
@@ -79,6 +79,7 @@ class GetApiTest extends \PHPUnit\Framework\TestCase
 
         $request->method('getParsedBody')->willReturn([
             'name' => 'JohnDoeUPDATED',
+            'color' => '#000000',
             'archive' => 0
         ]);
 
